@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Wisconsin</string>
+    <string name="user_name_solicitation">Insira o nome do paciente que irá realizar o teste</string>
+    <string name="enviar">Enviar</string>
+    <string name="preencha_o_nome_do_paciente">Preencha o nome do paciente</string>
+    
+</resources>
