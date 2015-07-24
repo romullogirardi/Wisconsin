@@ -22,9 +22,9 @@ public class Manager {
 	private Card lastCardInPosition3 = null;
 	private Card lastCardInPosition4 = null;
 	private Card cardToBePlayed = null;
-	private ArrayList<Card> cardsToBePlayed = new ArrayList<>();
+	private ArrayList<Card> cardsToBePlayed = new ArrayList<Card>();
 	private boolean lastMovementSuccess = false;
-	private ArrayList<Movement> movements = new ArrayList<>();
+	private ArrayList<Movement> movements = new ArrayList<Movement>();
 	private boolean gameFinished = false;
 	private int successCounter = 0;
 	

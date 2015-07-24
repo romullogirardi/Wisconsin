@@ -50,6 +50,206 @@ public class Card {
 	}
 	
 	public int getDrawableId() {
+		if(color.equals(Color.BLUE)) {
+			if(shape.equals(Shape.CIRCLE)) {
+				switch (number) {
+					case ONE:
+//						return R.drawable.blue_circle_one;
+					case TWO:
+//						return R.drawable.blue_circle_two;
+					case THREE:
+//						return R.drawable.blue_circle_three;
+					case FOUR:
+						return R.drawable.blue_circle_four;
+				}
+			}
+			else if(shape.equals(Shape.CROSS)) {
+				switch (number) {
+					case ONE:
+//						return R.drawable.blue_cross_one;
+					case TWO:
+						return R.drawable.blue_cross_two;
+					case THREE:
+//						return R.drawable.blue_cross_three;
+					case FOUR:
+//						return R.drawable.blue_cross_four;
+				}
+			}
+			else if(shape.equals(Shape.STAR)) {
+				switch (number) {
+					case ONE:
+						return R.drawable.blue_star_one;
+					case TWO:
+//						return R.drawable.blue_star_two;
+					case THREE:
+//						return R.drawable.blue_star_three;
+					case FOUR:
+//						return R.drawable.blue_star_four;
+				}
+			}
+			else if(shape.equals(Shape.TRIANGLE)) {
+				switch (number) {
+					case ONE:
+						return R.drawable.blue_triangle_one;
+					case TWO:
+						return R.drawable.blue_triangle_two;
+					case THREE:
+//						return R.drawable.blue_triangle_three;
+					case FOUR:
+//						return R.drawable.blue_triangle_four;
+				}
+			}
+		}
+		else if(color.equals(Color.GREEN)) {
+			if(shape.equals(Shape.CIRCLE)) {
+				switch (number) {
+					case ONE:
+//						return R.drawable.green_circle_one;
+					case TWO:
+//						return R.drawable.green_circle_two;
+					case THREE:
+						return R.drawable.green_circle_three;
+					case FOUR:
+//						return R.drawable.green_circle_four;
+				}
+			}
+			else if(shape.equals(Shape.CROSS)) {
+				switch (number) {
+					case ONE:
+//						return R.drawable.green_cross_one;
+					case TWO:
+//						return R.drawable.green_cross_two;
+					case THREE:
+						return R.drawable.green_cross_three;
+					case FOUR:
+//						return R.drawable.green_cross_four;
+				}
+			}
+			else if(shape.equals(Shape.STAR)) {
+				switch (number) {
+					case ONE:
+//						return R.drawable.green_star_one;
+					case TWO:
+						return R.drawable.green_star_two;
+					case THREE:
+//						return R.drawable.green_star_three;
+					case FOUR:
+//						return R.drawable.green_star_four;
+				}
+			}
+			else if(shape.equals(Shape.TRIANGLE)) {
+				switch (number) {
+					case ONE:
+//						return R.drawable.green_triangle_one;
+					case TWO:
+//						return R.drawable.green_triangle_two;
+					case THREE:
+//						return R.drawable.green_triangle_three;
+					case FOUR:
+//						return R.drawable.green_triangle_four;
+				}
+			}
+		}
+		else if(color.equals(Color.RED)) {
+			if(shape.equals(Shape.CIRCLE)) {
+				switch (number) {
+					case ONE:
+//						return R.drawable.red_circle_one;
+					case TWO:
+//						return R.drawable.red_circle_two;
+					case THREE:
+//						return R.drawable.red_circle_three;
+					case FOUR:
+//						return R.drawable.red_circle_four;
+				}
+			}
+			else if(shape.equals(Shape.CROSS)) {
+				switch (number) {
+					case ONE:
+//						return R.drawable.red_cross_one;
+					case TWO:
+//						return R.drawable.red_cross_two;
+					case THREE:
+						return R.drawable.red_cross_three;
+					case FOUR:
+//						return R.drawable.red_cross_four;
+				}
+			}
+			else if(shape.equals(Shape.STAR)) {
+				switch (number) {
+					case ONE:
+//						return R.drawable.red_star_one;
+					case TWO:
+//						return R.drawable.red_star_two;
+					case THREE:
+						return R.drawable.red_star_three;
+					case FOUR:
+//						return R.drawable.red_star_four;
+				}
+			}
+			else if(shape.equals(Shape.TRIANGLE)) {
+				switch (number) {
+					case ONE:
+						return R.drawable.red_triangle_one;
+					case TWO:
+//						return R.drawable.red_triangle_two;
+					case THREE:
+//						return R.drawable.red_triangle_three;
+					case FOUR:
+//						return R.drawable.red_triangle_four;
+				}
+			}
+		}
+		else if(color.equals(Color.YELLOW)) {
+			if(shape.equals(Shape.CIRCLE)) {
+				switch (number) {
+					case ONE:
+//						return R.drawable.yellow_circle_one;
+					case TWO:
+//						return R.drawable.yellow_circle_two;
+					case THREE:
+//						return R.drawable.yellow_circle_three;
+					case FOUR:
+//						return R.drawable.yellow_circle_four;
+				}
+			}
+			else if(shape.equals(Shape.CROSS)) {
+				switch (number) {
+					case ONE:
+//						return R.drawable.yellow_cross_one;
+					case TWO:
+//						return R.drawable.yellow_cross_two;
+					case THREE:
+						return R.drawable.yellow_cross_three;
+					case FOUR:
+//						return R.drawable.yellow_cross_four;
+				}
+			}
+			else if(shape.equals(Shape.STAR)) {
+				switch (number) {
+					case ONE:
+//						return R.drawable.yellow_star_one;
+					case TWO:
+//						return R.drawable.yellow_star_two;
+					case THREE:
+//						return R.drawable.yellow_star_three;
+					case FOUR:
+						return R.drawable.yellow_star_four;
+				}
+			}
+			else if(shape.equals(Shape.TRIANGLE)) {
+				switch (number) {
+					case ONE:
+//						return R.drawable.yellow_triangle_one;
+					case TWO:
+//						return R.drawable.yellow_triangle_two;
+					case THREE:
+//						return R.drawable.yellow_triangle_three;
+					case FOUR:
+						return R.drawable.yellow_triangle_four;
+				}
+			}
+		}
 		return R.drawable.empty_card;
 	}
 }

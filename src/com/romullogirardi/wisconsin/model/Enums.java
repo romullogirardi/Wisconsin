@@ -7,7 +7,7 @@ public class Enums {
 	}
 	
 	public enum Shape {
-		CIRCLE, TRIANGLE, SQUARE, STAR; 
+		CIRCLE, TRIANGLE, CROSS, STAR; 
 	}
 	
 	public enum Number {
@@ -16,5 +16,18 @@ public class Enums {
 	
 	public enum Strategy {
 		COLOR, SHAPE, NUMBER;
+		
+		public String toString() {
+			switch (this) {
+			case COLOR:
+				return "COR";
+			case SHAPE:
+				return "FORMA";
+			case NUMBER:
+				return "NÚMERO";
+			default:
+				return "INDEFINIDO";
+			}
+		}
 	}
 }

@@ -64,7 +64,7 @@ public class Movement {
 	//OTHER METHODS
 	public String toString() {
 		return "Estratégia corrente - " + currentStrategy.toString() + " / " +
-				((success) ? "ACERTO" : "ERRO") + " / " +
+				((success) ? "CERTO" : "ERRADO") + " / " +
 				((colorSuccess) ? "COR IGUAL" : "COR DIFERENTE") + " / " +
 				((shapeSuccess) ? "FORMA IGUAL" : "FORMA DIFERENTE") + " / " +
 				((numberSuccess) ? "NÚMERO IGUAL" : "NÚMERO DIFERENTE");

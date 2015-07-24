@@ -1,17 +1,35 @@
 package com.romullogirardi.wisconsin.view;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.romullogirardi.wisconsin.R;
+import com.romullogirardi.wisconsin.model.Constants;
 import com.romullogirardi.wisconsin.model.Manager;
 import com.romullogirardi.wisconsin.model.Movement;
 
@@ -27,6 +45,12 @@ public class WisconsinActivity extends Activity implements OnClickListener {
 	private ImageView lastCardInPosition3ImageView;
 	private ImageView lastCardInPosition4ImageView;
 	private ImageView cardToBePlayedImageView;
+	
+	//SOUND ELEMENTS
+	SoundPool mSoundPool;
+	int rightSoundID;
+	int wrongSoundID;
+	int gameFinishedSoundID;
 
 	//ACTIVITY LIFECYCLE METHODS
 	@Override
@@ -50,6 +74,17 @@ public class WisconsinActivity extends Activity implements OnClickListener {
 		lastCardInPosition2ImageView.setOnClickListener(this);
 		lastCardInPosition3ImageView.setOnClickListener(this);
 		lastCardInPosition4ImageView.setOnClickListener(this);
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
+		//Initializing sound elements
+		mSoundPool  = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
+		rightSoundID = mSoundPool.load(this, R.raw.certo, 1);
+		wrongSoundID = mSoundPool.load(this, R.raw.errado, 1);
+		gameFinishedSoundID = mSoundPool.load(this, R.raw.teste_finalizado, 1);
 	}
 	
 	@Override
@@ -108,30 +143,6 @@ public class WisconsinActivity extends Activity implements OnClickListener {
 				getResources().getDrawable(Manager.getInstance().getCardToBePlayed().getDrawableId())));
 	}
 	
-	private void showReport() {
-		
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-		dialogBuilder.setTitle("Relatório");
-		String message = new String();
-		message += "Nome: " + Manager.getInstance().getUserName() + "\n";
-		message += "Data: " + Manager.getInstance().getTestDate() + "\n";
-		message += "Duração: " + Manager.getInstance().getTestDuration() + "\n";
-		for(Movement movement : Manager.getInstance().getMovements()) {
-			message += movement.toString() + "\n";
-		}
-		message += "Número de acertos: " + Manager.getInstance().getNumberOfRightMovements() + "\n";
-		message += "Número de erros: " + Manager.getInstance().getNumberOfWrongMovements() + "\n";
-		dialogBuilder.setMessage(message);
-		dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				finish();
-			}
-		});
-		dialogBuilder.create().show();
-	}
-
 	//OVERRIDING OnClickListener METHOD
 	@Override
 	public void onClick(View v) {
@@ -160,20 +171,118 @@ public class WisconsinActivity extends Activity implements OnClickListener {
 		//Updating UI
 		updateUI();
 		
-		//Showing feedback about the movement
-		String feedback = new String();
+		//Showing feedback and playing sound about the movement
+		String feedback;
+		int soundID;
 		if(Manager.getInstance().isLastMovementSuccess()) {
 			feedback = "CERTO";
+			soundID = rightSoundID;
 		}
 		else {
 			feedback = "ERRADO";
+			soundID = wrongSoundID;
 		}
 		Toast.makeText(this, feedback,Toast.LENGTH_SHORT).show();
+		mSoundPool.play(soundID, 1f, 1f, 0, 0, 1f);
 		
 		//Checking if game is finished
 		if(Manager.getInstance().isGameFinished()) {
 			Manager.getInstance().setFinalTime(Calendar.getInstance());
-			showReport();
+			mSoundPool.play(gameFinishedSoundID, 1f, 1f, 0, 0, 1f);
+			showPDFReport();
 		}
+	}
+	
+	//SHOWING PDF REPORT
+	private void showPDFReport() {
+		String pdfReportPath = createPdfReport();
+		showPdfFile(pdfReportPath);
+		finish();
+	}
+	
+	@SuppressWarnings("deprecation")
+	private String createPdfReport() {
+        
+		com.itextpdf.text.Document document = new com.itextpdf.text.Document();
+
+         try {
+        	 	String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+                File dir = new File(path);
+                if(!dir.exists())
+                    dir.mkdirs();
+
+                String fileName = Constants.PDF_FILE_NAME + new Date().toGMTString() + ".pdf";
+                File file = new File(dir, fileName);
+                
+                FileOutputStream fOut = new FileOutputStream(file);
+
+                PdfWriter.getInstance(document, fOut);
+
+                //open the document
+                document.open();
+
+                Paragraph title = new Paragraph("RELATÓRIO - TESTE DE WISCONSIN");
+                title.setAlignment(Element.ALIGN_CENTER);
+                document.add(title);
+                document.add(new Paragraph(" "));
+                document.add(new Paragraph(" "));
+
+                document.add(new Paragraph("Nome: " + Manager.getInstance().getUserName()));
+                document.add(new Paragraph("Data: " + Manager.getInstance().getTestDate()));
+                document.add(new Paragraph("Duração: " + Manager.getInstance().getTestDuration()));
+                document.add(new Paragraph(" "));
+                document.add(new Paragraph(" "));
+
+    			PdfPTable table = new PdfPTable(6);
+    			table.setTotalWidth(6 * 88);
+    			table.setLockedWidth(true);
+    			table.addCell(createCell("Movimento"));
+    			table.addCell(createCell("Estratégia corrente"));
+    			table.addCell(createCell("Resultado"));
+    			table.addCell(createCell("Mesma cor"));
+    			table.addCell(createCell("Mesma forma"));
+    			table.addCell(createCell("Mesmo número"));
+
+        		for(int index = 0; index < Manager.getInstance().getMovements().size(); index++) {
+        			
+        			Movement movement = Manager.getInstance().getMovements().get(index);
+        			table.addCell(createCell(String.valueOf(index + 1)));
+        			table.addCell(createCell(movement.getCurrentStrategy().toString()));
+        			table.addCell(createCell((movement.isSuccess()) ? "CERTO" : "ERRADO"));
+        			table.addCell(createCell((movement.isColorSuccess()) ? "X" : ""));
+        			table.addCell(createCell((movement.isShapeSuccess()) ? "X" : ""));
+        			table.addCell(createCell((movement.isNumberSuccess()) ? "X" : ""));
+        		}
+    			document.add(table);
+
+                document.add(new Paragraph(" "));
+                document.add(new Paragraph(" "));
+        		document.add(new Paragraph("Número de acertos: " + Manager.getInstance().getNumberOfRightMovements()));
+        		document.add(new Paragraph("Número de erros: " + Manager.getInstance().getNumberOfWrongMovements()));
+                
+                return path + "/" + fileName;
+         } catch (DocumentException de) {
+                 Log.e("PDFCreator", "DocumentException:" + de);
+         } catch (IOException e) {
+                 Log.e("PDFCreator", "ioException:" + e);
+         } 
+         finally {
+        	 document.close();
+         }
+         return null;
+    }
+	
+	private PdfPCell createCell(String text) {
+		PdfPCell cell = new PdfPCell(new Phrase(text));
+		cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+		return cell;
+	}
+	
+	public void showPdfFile(String pdfPath) {
+		File file = new File(pdfPath);
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setDataAndType(Uri.fromFile(file), "application/pdf");
+		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		startActivity(intent);
 	}
 }
